@@ -1,56 +1,19 @@
-from bs4 import BeautifulSoup
-import requests
-
+from vnstock3 import Vnstock
 
 def get_roe(ticker):
-    url = 'https://www.macrotrends.net/stocks/charts/' + \
-        ticker.lower() + '//roe'
-    web = requests.get(
-        url, 'html.parser')
-
-    soup = BeautifulSoup(web.content, features="html.parser")
-
-    data = soup.select("td")[3].get_text()[:-1]
-    roe = float(data)
+    stock = Vnstock().stock(symbol=ticker, source='VCI')
+    ratio = stock.finance.ratio(period='year', lang='en')
+    roe = ratio['Chỉ tiêu khả năng sinh lợi']['ROE (%)'][::-1]
     return roe
 
-
 def get_revenue_quarterly(ticker):
-    url = 'https://www.macrotrends.net/stocks/charts/' + \
-        ticker.lower() + '//revenue'
-    web = requests.get(
-        url, 'html.parser')
-
-    soup = BeautifulSoup(web.content, features="html.parser")
-
-    data = soup.select("table > tbody")[1].select("tr > td")
-    revenue_list = []
-    i = 1
-    while i < (len(data[:10])):
-        revenue = float(data[i].get_text()[1:].replace(',', ''))
-        revenue_list.append(revenue)
-        i += 2
-
-    # return revenue_list from latest to furthest date (left to right)
+    stock = Vnstock().stock(symbol=ticker, source='VCI')
+    income_statement = stock.finance.income_statement(period='quarter', lang='en')
+    revenue_list = income_statement['Revenue (Bn. VND)'][::-1]
     return revenue_list
 
-
 def get_revenue_annually(ticker):
-    url = 'https://www.macrotrends.net/stocks/charts/' + \
-        ticker.lower() + '//revenue'
-
-    web = requests.get(
-        url, 'html.parser')
-
-    soup = BeautifulSoup(web.content, features="html.parser")
-
-    data = soup.select("table > tbody")[0].select("tr > td")
-    revenue_list = []
-    i = 1
-    while i < (len(data[:10])):
-        revenue = float(data[i].get_text()[1:].replace(',', ''))
-        revenue_list.append(revenue)
-        i += 2
-
-    # return revenue_list from latest to furthest date (left to right)
+    stock = Vnstock().stock(symbol=ticker, source='VCI')
+    income_statement = stock.finance.income_statement(period='year', lang='en')
+    revenue_list = income_statement['Revenue (Bn. VND)'][::-1]
     return revenue_list

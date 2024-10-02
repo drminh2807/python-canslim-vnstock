@@ -1,44 +1,13 @@
-from bs4 import BeautifulSoup
-import requests
-
+from vnstock3 import Vnstock
 
 def get_quarterly_eps(ticker):
-    url = 'https://www.macrotrends.net/stocks/charts/' + \
-        ticker.lower() + '//eps-earnings-per-share-diluted'
-    web = requests.get(
-        url, 'html.parser')
-
-    soup = BeautifulSoup(web.content, features="html.parser")
-
-    try:
-        data = soup.select("table > tbody")[1].select("tr > td")
-        quarterly_eps = []
-        i = 1
-        while i < (len(data[:10])):
-            eps = float(data[i].get_text()[1:])
-            quarterly_eps.append(eps)
-            i += 2
-        return quarterly_eps[::-1]
-    except:
-        pass
-
+    return get_eps(ticker, 'quarter')
 
 def get_annually_eps(ticker):
-    url = 'https://www.macrotrends.net/stocks/charts/' + \
-        ticker.lower() + '//eps-earnings-per-share-diluted'
-    web = requests.get(
-        url, 'html.parser')
+    return get_eps(ticker, 'year')
 
-    soup = BeautifulSoup(web.content, features="html.parser")
-
-    try:
-        data = soup.select("table > tbody")[0].select("tr > td")
-        quarterly_eps = []
-        i = 1
-        while i < (len(data[:10])):
-            eps = float(data[i].get_text()[1:])
-            quarterly_eps.append(eps)
-            i += 2
-        return quarterly_eps[::-1]
-    except:
-        pass
+def get_eps(ticker, period):
+    stock = Vnstock().stock(symbol=ticker, source='VCI')
+    ratio = stock.finance.ratio(period=period, lang='en')
+    result = ratio['Chỉ tiêu định giá']['EPS (VND)'][::-1]
+    return result
