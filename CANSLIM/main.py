@@ -3,14 +3,20 @@ from get_stock_df import get_stock_df
 from visualize_stocks_quarterly import visualize_stocks_quarterly
 from visualize_stocks_annually import visualize_stocks_annually
 import fire
-
+from vnstock3 import Vnstock
 def main(*tickers: List[str]):
     """
     Returns analytics using the CANSLIM method.
-    :param tickers: A list of stock tickers.
+    :param tickers: A list of stock tickers or group HOSE, VN30, VNMidCap, VNSmallCap, VNAllShare, VN100, ETF, HNX, HNX30, HNXCon, HNXFin, HNXLCap, HNXMSCap, HNXMan, UPCOM, FU_INDEX.
     :return: analytics using the CANSLIM method.
     """    
-    tickers_list = [ticker for ticker in tickers]
+    available_groups = ['HOSE', 'VN30', 'VNMidCap', 'VNSmallCap', 'VNAllShare', 'VN100', 'ETF', 'HNX', 'HNX30', 'HNXCon', 'HNXFin', 'HNXLCap', 'HNXMSCap', 'HNXMan', 'UPCOM', 'FU_INDEX']
+    
+    if tickers[0] in available_groups:
+        tickers_list = Vnstock().stock(symbol='FPT', source='VCI').listing.symbols_by_group(tickers[0])
+    else:
+        tickers_list = tickers
+
     if len(tickers_list) == 0:
         print("Usage: python CANSLIM/main.py analyze <ticker> <ticker> <ticker> ...")
         return

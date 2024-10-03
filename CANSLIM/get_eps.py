@@ -9,5 +9,5 @@ def get_annually_eps(ticker):
 def get_eps(ticker, period):
     stock = Vnstock().stock(symbol=ticker, source='VCI')
     ratio = stock.finance.ratio(period=period, lang='en')
-    result = ratio['Chỉ tiêu định giá']['EPS (VND)'][::-1]
-    return result
+    result = ratio['Chỉ tiêu định giá']['EPS (VND)'][:5]
+    return list(reversed(result))

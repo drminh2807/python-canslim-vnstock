@@ -1,4 +1,4 @@
-# NOTE: Macrotrends has blocked automated access!
+# NOTE: Macrotrends has blocked automated access! Use [Vnstock](https://github.com/thinh-vu/vnstock) instead.
 
 # Introduction
 
@@ -21,7 +21,3 @@
    - You can run `python CANSLIM/main.py -h` or `python CANSLIM/main.py analyze -h` to learn more about available command.
    - The program will return **-GOOD STOCKS-** that fit the CANSLIM criteria.
 4. `python Pyramid_Profit_Calculator/main.py` to start the Pyramid Buying calculator GUI.
-
-### Notes:
-
-- Data are scraped from [Macrotrends](https://www.macrotrends.net/)
